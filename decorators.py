@@ -14,18 +14,24 @@ product = {
 }
 
 
-def is_admin():
-    pass
+def is_admin(func):
+    
+    def wrapper(user: dict, *args, **kwargs):
+        
+        if user['role'] == 'admin':
+            data = func(user=user, *args, **kwargs)
+
+            return data
+        else:
+            raise Exception('siz admin emassiz.')
+
+    return wrapper
 
 
 @is_admin
 def create_product(user: dict, product: dict):
     products.append(product)
 
-
-@is_admin
-def delete_product(user: dict, product: dict):
-    pass
-
-
-create_product(user01, {})
+create_product(user=user01, product=product)
+create_product(user=user02, product=product)
+print(products)
